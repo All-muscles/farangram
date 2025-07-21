@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block main %}
+    <form action="/search" method="post">
+        <input type="text" name="username" placeholder="Username" autocomplete="off">
+        <button type="submit">Search</button>
+    </form>
+    <br>
+
+    {% if rows %}
+        <ul>
+            {% for row in rows %}
+                <li>
+                    <a href="/user/{{ row.username }}">
+                        <img class="avatar" src="/static/uploads/avatars/{{ row.picture }}" alt="avatar">
+                        <span>{{ row.username }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif empty %}
+        No usernames like this were found
+    {% else %}
+        Search for someone you know with using their username in order to find them 
+    {% endif %}
+{% endblock %}

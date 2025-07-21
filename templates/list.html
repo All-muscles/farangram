@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ list_type }}
+{% endblock title %}
+
+{% block main %}
+    {% for username in usernames %}
+        <a href="/user/{{ username }}">{{ username }}</a>
+    {% endfor %}
+{% endblock main %}

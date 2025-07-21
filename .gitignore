@@ -1,0 +1,7 @@
+__pycache__/
+flask_session/
+specification.txt
+# this is my personal notes dont mind it
+faran.db
+.venv
+static/uploads

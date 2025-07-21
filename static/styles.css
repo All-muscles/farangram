@@ -1,0 +1,18 @@
+.avatar{
+  width: 50px;   
+  height: 50px;
+  object-fit: cover;   
+  border-radius: 50%;  
+}
+
+ul {
+  list-style: none;
+}
+
+/* .list-element {
+  margin-bottom: 1.5rem;
+  background-color: black;
+  padding: 1rem;
+  border-radius: 20px;
+  display: flex;
+} */

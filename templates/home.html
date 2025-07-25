@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock title %}
+
+{% block main %}
+    {% for post in posts%}
+        <div>
+            <img class="avatar" src="/static/uploads/avatars/{{ post.avatar }}" alt="avatar">
+            <a href="/user/{{ post.username }}">{{ post.username }}</a>
+
+            <img src="/static/uploads/posts/{{ post.picture }}" alt="post">
+            <span>{{ post.caption }}</span>
+            <span>{{ post.date }}</span>
+        </div>
+    {% endfor %}
+{% endblock main %} 

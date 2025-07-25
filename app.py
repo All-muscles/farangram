@@ -205,7 +205,37 @@ def my_profile():
 
 @app.route("/home")
 def home():
-    return apology("TODO", 500)
+    with sqlite3.connect(DB_NAME) as conn:
+        cursor = conn.cursor()
+
+        # select the people the user is following
+        followings_ids = cursor.execute("SELECT following_id FROM follows WHERE follower_id = ?", (session["user_id"], )).fetchall()
+        followings_ids = [row[0] for row in followings_ids]
+
+        # if they dont have anyone followed
+        if not followings_ids:
+            return apology("follow someone to get view their recent posts in your home page", 200)
+
+        # select 5 latest posts from each person along with captions and 
+        placeholder = ",".join("?" * len(followings_ids))
+        q = f"SELECT users.avatar, users.username, uploads.caption, uploads.picture, uploads.creation_date FROM uploads JOIN users ON uploads.uploader_id = users.user_id WHERE uploader_id IN ({placeholder}) ORDER BY uploads.creation_date DESC LIMIT 5 "
+        rows = cursor.execute(q, followings_ids).fetchall()
+
+        if not rows:
+            return apology("None of your followings have posted anything", 200)
+
+        posts = []
+        for row in rows:
+            post = {}
+            post["avatar"] = row[0]
+            post["username"] = row[1]
+            post["caption"] = row[2]
+            post["picture"] = row[3]
+            post["date"] = datetime.strptime(row[4], "%Y-%m-%d %H:%M:%S.%f").strftime("%B %d, %Y")
+            posts.append(post)
+
+        # load the posts into the home page based on date (newer posts must be upper)
+        return render_template("home.html", posts=posts)
 
 @app.route("/explore")
 def explore():

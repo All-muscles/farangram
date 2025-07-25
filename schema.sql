@@ -21,8 +21,8 @@ CREATE TABLE uploads (
 DROP TABLE IF EXISTS follows;
 CREATE TABLE follows (
     follow_id     INTEGER PRIMARY KEY AUTOINCREMENT,
-    follower_id   INTEGER NOT NULL,
-    following_id  INTEGER NOT NULL,
+    follower_id   INTEGER NOT NULL, -- this is the person who followed --
+    following_id  INTEGER NOT NULL, -- this is the person they followed --
     FOREIGN KEY (follower_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (following_id) REFERENCES users(user_id) ON DELETE CASCADE,
     CONSTRAINT no_self_following CHECK (follower_id != following_id),

@@ -25,22 +25,30 @@
     {# and if no such parameters were given dont show a follow or an unfollow button because it is themselves #}
     {% endif %}
     {# the rest will load anyways regardless of wether if the page is the users page or the page for anyone #}
-    <img class="avatar" src="/static/uploads/avatars/{{ avatar }}" alt="avatar">
+    <div>
+        <img class="avatar" src="/static/uploads/avatars/{{ avatar }}" alt="avatar">
         {{ username }}
         posts: {{ posts_count }}
         <a href="/{{ username }}/followings">followings: {{ followings }}</a>
         <a href="/{{ username }}/followers">followers: {{ followers }}</a>  
+    </div>
 
-        <!-- and here should somehow come their posts in a grid view -->
-        {% if posts %}
-            {% for post in posts%}
-                <div>
-                    <img src="/static/uploads/posts/{{ post.picture }}" alt="post">
-                    <span>{{ post.caption }}</span>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>This user has not posted anything</p>
-        {% endif %}
-        
+    <!-- and here should somehow come their posts in a grid view -->
+    {% if posts %}
+    <table>
+        {% for row in posts | batch(3) %}
+            <tr>
+                {% for post in row %}
+                    <td>
+                        <a href="/p/{{ post.picture }}"><img width="75%" src="/static/uploads/posts/{{ post.picture }}" alt="post"></a>
+                        <span>{{ post.caption }}</span>
+                    </td>
+                {% endfor %}
+            </tr> 
+        {% endfor %}
+    </table>    
+    {% else %}
+        <p>This user has not posted anything</p>
+    {% endif %}
+
 {% endblock main %} 

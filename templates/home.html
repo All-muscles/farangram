@@ -10,9 +10,8 @@
             <img class="avatar" src="/static/uploads/avatars/{{ post.avatar }}" alt="avatar">
             <a href="/user/{{ post.username }}">{{ post.username }}</a>
 
-            <img src="/static/uploads/posts/{{ post.picture }}" alt="post">
+            <a href="/p/{{ post.picture }}"><img src="/static/uploads/posts/{{ post.picture }}" alt="post"></a>
             <span>{{ post.caption }}</span>
-            <span>{{ post.date }}</span>
         </div>
     {% endfor %}
 {% endblock main %} 

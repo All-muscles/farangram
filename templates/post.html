@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Post
+{% endblock title %}
+
+{% block main %}
+    <img class="avatar" src="/static/uploads/avatars/{{ post.avatar }}" alt="avatar">
+    <a href="/user/{{ post.username }}">{{ post.username }}</a>
+    
+    <img src="/static/uploads/posts/{{ post.picture }}" alt="post">
+    <p>{{ post.caption }}</p>
+    <p>{{ post.date }}</p>
+{% endblock main %}

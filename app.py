@@ -4,7 +4,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import sqlite3
-from helpers import login_required, apology, extension
+from helpers import *
 import email_validator 
 from pathlib import Path
 from uuid import uuid4
@@ -218,7 +218,7 @@ def home():
 
         # select 5 latest posts from each person along with captions and 
         placeholder = ",".join("?" * len(followings_ids))
-        q = f"SELECT users.avatar, users.username, uploads.caption, uploads.picture, uploads.creation_date FROM uploads JOIN users ON uploads.uploader_id = users.user_id WHERE uploader_id IN ({placeholder}) ORDER BY uploads.creation_date DESC LIMIT 5 "
+        q = f"SELECT users.avatar, users.username, uploads.caption, uploads.picture FROM uploads JOIN users ON uploads.uploader_id = users.user_id WHERE uploader_id IN ({placeholder}) ORDER BY uploads.creation_date DESC LIMIT 5 "
         rows = cursor.execute(q, followings_ids).fetchall()
 
         if not rows:
@@ -231,7 +231,6 @@ def home():
             post["username"] = row[1]
             post["caption"] = row[2]
             post["picture"] = row[3]
-            post["date"] = datetime.strptime(row[4], "%Y-%m-%d %H:%M:%S.%f").strftime("%B %d, %Y")
             posts.append(post)
 
         # load the posts into the home page based on date (newer posts must be upper)
@@ -431,3 +430,23 @@ def followers(username):
             usernames.append(row[0])
 
         return render_template("list.html", list_type="Followers", usernames=usernames)
+    
+@app.route("/p/<string:post>")
+@login_required
+def posts(post):
+    post_name = post
+    with sqlite3.connect(DB_NAME) as conn:
+        cursor = conn.cursor()
+        data = cursor.execute("SELECT caption, creation_date FROM uploads WHERE picture = ?", (post_name, )).fetchone()
+        
+        if not data:
+            return apology("Such post does not exist", 404)
+
+        post = {}
+        post["caption"] = data[0]
+        post["date"] = format_date(data[1])
+        post["picture"] = post_name
+
+        data = cursor.execute("SELECT username, avatar")
+    
+    return render_template("post.html", post=post)

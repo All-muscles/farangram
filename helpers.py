@@ -4,6 +4,7 @@ import requests
 from pathlib import Path
 from werkzeug.datastructures import FileStorage
 from typing import Iterable
+from datetime import datetime
 
 def login_required(f):
     """
@@ -41,3 +42,6 @@ def extension(file: FileStorage, allowed_exts: Iterable[str]) -> bool:
         return True
     
     return False
+
+def format_date(date: str):
+    return datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f").strftime("%B %d, %Y")
